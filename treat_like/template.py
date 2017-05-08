@@ -37,12 +37,6 @@ class Template:
 
         return self
 
-    def if_is(self, *validators):
-        for validator in validators:
-            self._pipe.append(('if_is', (validator,)))
-
-        return self
-
     def apply_to(self, value, name=None):
         t = Treat(value, name)
 
@@ -54,5 +48,3 @@ class Template:
             return True, t.results(), None
         except ProcessException as ex:
             return False, value, ex
-
-

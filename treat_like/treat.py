@@ -9,7 +9,6 @@ class Treat:
         self._name = name
 
         self._collection_mode = False
-        self._aborted = False
 
     def _like(self, value, converter, message=None):
         if isinstance(converter, MetaConverter):
@@ -44,9 +43,6 @@ class Treat:
             raise ValidationException(self._name, message)
 
     def like(self, converter, message=None):
-        if self._aborted:
-            return self
-
         if self._collection_mode:
             self._value = tuple(self._like(value=v, converter=converter, message=message) for v in self._value)
         else:
@@ -55,9 +51,6 @@ class Treat:
         return self
 
     def must_be(self, validator, message=None):
-        if self._aborted:
-            return self
-
         if self._collection_mode:
             for v in self._value:
                 self._must_be(value=v, validator=validator, message=message)
@@ -72,15 +65,6 @@ class Treat:
 
     def all(self):
         self._collection_mode = False
-        return self
-
-    def if_is(self, validator):
-        try:
-            self._must_be(self._value, validator)
-            self._aborted = False
-        except ValidationException:
-            self._aborted = True
-
         return self
 
     def results(self):
