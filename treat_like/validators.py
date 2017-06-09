@@ -81,7 +81,7 @@ class lt(Validator):
         self._x = x
 
     def validate(self, value):
-        return len(value) < self._x
+        return value < self._x
 
     def get_message(self):
         return 'must be less then {x}'.format(x=self._x)
