@@ -56,13 +56,13 @@ class model_of(Converter):
 
 class coordinates(Converter):
     def convert(self, value):
-        lng, lat = (v.strip() for v in value.split(','))
-        return lng, lat
+        lat, lng = (v.strip() for v in value.split(','))
+        return lat, lng
 
 
 class geos_coordinates(coordinates):
     def convert(self, value):
-        lng, lat = super().convert(value)
+        lat, lng = super().convert(value)
         return GEOSGeometry('POINT({LON} {LAT})'.format(LON=lng, LAT=lat), srid=4326)
 
 
@@ -140,3 +140,27 @@ class real(Converter):
 
     def get_message(self):
         return 'unable to represent as float'
+
+
+class lowercased(Converter):
+    def convert(self, value):
+        return value.lower()
+
+    def get_message(self):
+        return "Invalid format"
+
+
+class uppercased(Converter):
+    def convert(self, value):
+        return value.upper()
+
+    def get_message(self):
+        return "Invalid format"
+
+
+class stripped(Converter):
+    def convert(self, value):
+        return value.strip()
+
+    def get_message(self):
+        return "Invalid format"
