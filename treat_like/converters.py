@@ -63,7 +63,7 @@ class coordinates(Converter):
 class geos_coordinates(coordinates):
     def convert(self, value):
         lat, lng = super().convert(value)
-        return GEOSGeometry('POINT({LON} {LAT})'.format(LON=lng, LAT=lat), srid=4326)
+        return GEOSGeometry('POINT({LAT} {LON})'.format(LAT=lat, LON=lng), srid=4326)
 
 
 class csv(Converter):

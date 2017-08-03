@@ -1,7 +1,7 @@
 from setuptools import setup
 
 setup(name='treat_like',
-      version='0.6',
+      version='0.7',
       description='Python library for processing and validation user input data',
       url='https://github.com/atomAltera/treat_like',
       author='Konstantin Alikhanov',
