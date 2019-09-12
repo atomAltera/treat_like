@@ -1,3 +1,5 @@
+from treat_like import ProcessException
+
 class TreatResults:
     class _CorrectnessTracker:
         def __init__(self, errors, track_correct):
@@ -22,6 +24,7 @@ class TreatResults:
 
         self._errors = None
         self._has_errors = None
+        self._general_errors = set()
 
     def put(self, field_name, success, result, ex):
         self._values[field_name] = (success, result, ex)
@@ -30,12 +33,24 @@ class TreatResults:
         self._has_errors = None
         return self
 
+    def put_error(self, field_name, message):
+        if field_name in self._values:
+            existing = self._values[field_name]
+            value = existing[1]
+        else:
+            value = None
+
+        return self.put(field_name, False, value, ProcessException(field_name, message))
+
+    def put_general_error(self, message):
+        self._general_errors.add(message)
+
     @property
     def has_errors(self):
         if self._has_errors is None:
             self._has_errors = not all(map(lambda r: r[0], self._values.values()))
 
-        return self._has_errors
+        return self._has_errors and self._general_errors
 
     @property
     def errors(self):
@@ -43,6 +58,10 @@ class TreatResults:
             self._errors = dict(map(lambda v: (v[2].name, v[2].message), filter(lambda v: not v[0], self._values.values())))
 
         return self._errors
+
+    @property
+    def general_errors(self):
+        return list(self._general_errors)
 
     @property
     def has_error_in(self):
