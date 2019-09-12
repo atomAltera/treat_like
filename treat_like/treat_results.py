@@ -45,7 +45,7 @@ class TreatResults:
     @property
     def has_errors(self):
         has_field_errors = not all(map(lambda r: r[0], self._values.values()))
-        has_general_errors = not self._general_errors
+        has_general_errors = self._general_errors
 
         return has_field_errors or has_general_errors
 
